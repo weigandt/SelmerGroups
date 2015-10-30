@@ -1,5 +1,59 @@
 from sage.all import *
 
+var('t1,t0')
+
+class EllipticSurface:
+    """
+        A fibration of elliptic curves over P^1.
+    """
+    def __init__(self, ais):
+        self.a1 = ais[0]
+        self.a2 = ais[1]
+        self.a3 = ais[2]
+        self.a4 = ais[3]
+        self.a6 = ais[4]
+
+    def arithmetic_genus(self):
+        raise NotImplementedError("Need to implement minimal model first!")
+
+    def minimal_model(self)
+        raise NotImplementedError("Need to adapt Tate's Algorithm")
+
+A_z2z8 = (2*t1*t0)^4
+C_z2z8 = (t0^2 - t1^2)^4
+E_z2z8 = EllipticSurface([0,A_z2z8 + A_z2z8,0,A_z2z8*C_z2z8,0])
+
+class PartialLSeriesTree:
+    """
+        primes_and_lists -- A dictionary whose keys are a finite set of primes and whose values are a lists of admissible local factors for LSeries.
+        
+        admissible_root_numbers -- A list of admissible signs for the funcitonal equation. Set to [-1, 1] by default.
+
+    """
+    def __init__(self, primes_and_lists, admissible_root_numbers = [-1,1]):
+        self.primes = primes_and_lists.keys()
+        self.smoothness = max(self.primes)
+        root_number_set = Set(admissible_root_numbers)
+        if root_number_set == Set([1]):
+            self.root_number = 1
+        elif root_number_set == Set([-1]):
+            self.root_number = -1
+        elif root_number_set != Set([-1,1]):
+            raise ValueError("admmisble_root_numbers must be [-1],[1], or [-1,1]")
+
+
+
+
+class PartialLSeries:
+
+    def __init__(self, primes_and_Aps):
+        self.primes = primes_and_Aps.keys()
+        self.smoothness = max(self.primes)
+
+    def.insulator(self)
+        return prod([p for p in prime_range(self.smoothness) if not p in self.primes])
+
+
 def get_coprime(m,n,p):
     #This is a subruntine to trace_table which gets a coprime pair (m2,n2) of lowest (dictionary) height.
     raise NotImplementedError("This will loop forever when n = m = p. Need to prove a theorem about split vs non-split for this case before removing this error.")
