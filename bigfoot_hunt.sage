@@ -77,11 +77,19 @@ class PartialLSeries:
         X = self.smoothness
         return sum([RDF(-dict[p]*log(p)/(p*log(X))) for p in prime_range(X+1)])
 
+    def medium_rare(self):
+        raise NotImplementedError()
+
+    def raw_bias(self):
+        raise NotImplementedError()
 
 
-def get_coprime(m,n,p):
-    #This is a subruntine to trace_table which gets a coprime pair (m2,n2) of lowest (dictionary) height.
-    raise NotImplementedError("This will loop forever when n = m = p. Need to prove a theorem about split vs non-split for this case before removing this error.")
+
+def get_specialiazation(mbar,nbar,N):
+    #Be very careful about when n = m = p, this could loop.
+    """
+    """
+    raise NotImplementedError(" Need to prove a theorem about split vs non-split for this case before removing this error.")
     # I think Edray proved the necessary theorem back in 2008, since in this case p divides n*m.
     if gcd(m,n) == 1:
         return (m,n)
