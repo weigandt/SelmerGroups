@@ -13,11 +13,21 @@ class EllipticSurface:
         self.a4 = ais[3]
         self.a6 = ais[4]
 
-    def arithmetic_genus(self):
-        raise NotImplementedError("Need to implement minimal model first!")
-
     def minimal_model(self)
+        """
+            Returns a model for self as an elliptic curve over \Q(P^1). In this case, each Ai has degree at most chi * i, where chi is the arithmet genus of the surface.
+        """
         raise NotImplementedError("Need to adapt Tate's Algorithm")
+        self.minimal_module = [A1,A2,A3,A4,A6]
+        return self.minimal_model
+
+    def arithmetic_genus(self):
+        #raise NotImplementedError("Need to take the maximum")
+        weights = [1,2,3,4,6]
+        return max([self.minimal_model()[k].degree()/weights[k] for k in [0,1,2,3,4]])
+
+    def TrivialLattice(self):
+        raise NotImplementedError()
 
 A_z2z8 = (2*t1*t0)^4
 C_z2z8 = (t0^2 - t1^2)^4
@@ -41,17 +51,32 @@ class PartialLSeriesTree:
         elif root_number_set != Set([-1,1]):
             raise ValueError("admmisble_root_numbers must be [-1],[1], or [-1,1]")
 
-
-
+    def breadth_first_itterator(self):
+        raise NotImplementedError("Learn about Tree Searches")
 
 class PartialLSeries:
 
-    def __init__(self, primes_and_Aps):
-        self.primes = primes_and_Aps.keys()
+    def __init__(self, dict, degree = 2):
+        """
+            dict -- A dictionary of the form {(p1,Ap1), ... , (pn,Apn)}
+            degree -- The degree of the L-function. For now, we are sticking
+                      with this, since we're recording Ap's not polynomials.
+        """
+        if not degree == 2:
+            raise NotImplementedError("Only working with elliptic curves right now")
+        self.primes = dict.keys()
         self.smoothness = max(self.primes)
+        self.missing_primes = [p for p in prime_range(self.smoothness) if not p in self.primes]
+        if self.missing_primes != []:
+            raise NotImplementedError("Decide how to grade uninsulated data")
 
-    def.insulator(self)
-        return prod([p for p in prime_range(self.smoothness) if not p in self.primes])
+    def well_done(self):
+        """
+            Returns a slight modifictation of mean of the "well done" data defined by Mazur and Stein associated to the local data of a partial L-function for an elliptic curve. As X gets larger, this is conjectured to converge to the analytic rank of E.
+        """
+        X = self.smoothness
+        return sum([RDF(-dict[p]*log(p)/(p*log(X))) for p in prime_range(X+1)])
+
 
 
 def get_coprime(m,n,p):
@@ -70,10 +95,13 @@ def get_coprime(m,n,p):
         n1 += p
 
 def trace_table(p):
-    #Input: A prime p >= 11
-    #Output: A table pairs (m mod p, n mod p) for which the curve
-    # E_{m,n} : Y^2 = X*(X + (2*m*n)^4)*(X+ (n^2 - m^2)^4)
-    # has good reduction at p together with the value of A_p.
+    """
+        Input: A prime p > 2
+        
+        Output: A table pairs (m mod p, n mod p) for which the curve
+        E_{m,n} : Y^2 = X*(X + (2*m*n)^4)*(X+ (n^2 - m^2)^4)
+        has good reduction at p together with the value of A_p.
+    """
     aplist = [-1,1]
     aplist += trace_range(p,16)
     aplist.sort()
@@ -99,6 +127,10 @@ def trace_table(p):
     return apdict
 
 def trace_range(p,M):
+    """
+        INPUT: a prime p and an intger M.
+        OUTPUT: The possible values of A_p for an elliptic curve over Q with good reduction at p such that the image of E(Q)_tors mod p has order divisible by M.
+    """
     # A_p = p + 1 - b*M where b >= 0
     # Start big
     # Keep going down until A_p < -2*sqrt(p)
